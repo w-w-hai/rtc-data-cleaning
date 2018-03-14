@@ -337,7 +337,7 @@ import：代码需要引入的类，如果pom里并没有指定相应的dependen
 # 自定义插件
 开发和使用自定义的decoder和filter也很简单，以decoder为例
 
-* 在`com.sdo.dw.rtc.cleaning.decoder.impl`包中新建`Decoder`接口的实现类`MyDecoder`，并且加上`@DecoderType("my")`注解
+* 在`com.sdo.dw.rtc.cleaning.decoder.impl`包中新建`Decoder`接口的实现类`MyDecoder`，并且加上`@DecoderType("my")`注解，注解的值即为该decoder的id
 ```
 @DecoderType("my")
 public class MyDecoder implements Decoder {
@@ -355,7 +355,7 @@ public class MyDecoder implements Decoder {
 
 }
 ```
-* 然后就可以在配置中调用该decoder
+* 然后就可以在配置中通过id调用该decoder
 ```
 {
 	"decoder":"my",
@@ -364,3 +364,5 @@ public class MyDecoder implements Decoder {
 }
 ```
 其中`my_param1`和`my_param2`可以通过`decoderContext`获取
+
+filter的自定义同理
