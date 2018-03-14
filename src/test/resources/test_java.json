@@ -1,0 +1,28 @@
+{
+	"decoder": {
+		"type": "grok",
+		"grok_patterns": {
+			"BSLOG": "%{DATA}\t%{GREEDYDATA:data}"
+		},
+		"grok_entry": "BSLOG"
+	},
+	"filters": [
+		{
+			"type": "java",
+			"params": {
+				"code_file": "D:\\gitlab\\rtc-public-service\\rtc-data-cleaning\\src\\test\\resources\\test_code",
+				"import": [
+					"java.util.List",
+					"java.util.regex.Matcher",
+					"java.util.List",
+					"java.util.regex.Matcher",
+					"java.util.regex.Pattern",
+					"com.alibaba.fastjson.JSON",
+					"com.alibaba.fastjson.JSONObject",
+					"com.google.common.collect.Lists",
+					"com.google.common.collect.Sets"
+				]
+			}
+		}
+	]
+}

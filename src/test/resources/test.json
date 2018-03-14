@@ -1,0 +1,15 @@
+{
+	"decoder":{
+		"type":"grok",
+		"grok_patterns":{
+			"BSLOG":"%{DATA}\t%{GREEDYDATA:data}"
+		},
+		"grok_entry":"BSLOG"
+	},
+	
+	"filters":[
+		{"type":"json", "params":{"field":"data", "discard_existing":true}},
+		{"type":"keep", "params":{"fields":["ptId","orderId","amount"]}},
+		{"type":"underline", "params":{"fields":["orderId"]}}
+	]
+}
