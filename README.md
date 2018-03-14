@@ -1,6 +1,6 @@
 在ETL中的"T"或者是实时流处理中我们经常需要针对每个用户需求开发一个类或者代码块来完成数据清洗的工作
 
-使用这个类库，你只需要开发一个公共处理类，然后写一个JSON配置作为参数传到类中，就能轻松完成需求，节省大量开发，测试，发布和维护成本
+使用这个类库，你只需要写一个JSON配置，就能轻松完成需求，节省大量开发，测试，发布和维护成本
 
 Cleaner的输入是一个String，最终输出是一个JSON。这里借鉴了Logstash里的filter的概念，但这里为两类，decoder和filter。decoder负责将一个String解析成JSON；filter负责将一个JSON转化成另一个(也可以是同一个)JSON，最终形成一个清洗链
 
@@ -17,6 +17,7 @@ System.out.println(result.getPayload());
 srcData传入需要清洗的数据，config是清洗的配置信息，具体配置见下一章节
 
 # Sample Config
+具体用法可以参考[测试代码](./src/test/java/com/sdo/dw/rtc/cleaning/Test.java)
 ```
 {
 	"decoder":{
