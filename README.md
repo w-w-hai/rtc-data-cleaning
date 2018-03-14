@@ -6,8 +6,8 @@ Cleaner的输入是一个String，最终输出是一个JSON。这里借鉴了Log
 
 * [Getting Started](./README.md#user-content-getting-started)
 * [Sample Config](./README.md#user-content-sample-config)
-	* [Decoder](./README.md#user-content-decoder)
-	* [Filters](./README.md#user-content-filters)
+	* [Decoder](./README.md#user-content-decoder): [json](./README.md#user-content-json) [grok](./README.md#user-content-grok)
+	* [Filters](./README.md#user-content-filters): 
 
 
 
