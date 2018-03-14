@@ -4,7 +4,9 @@
 
 这里借鉴了Logstash里的filter
 
-# Sample Code
+# Getting Started
+* 下载[rtc-data-cleaning-<version>.jar](./build/rtc-data-cleaning-0.0.1-SNAPSHOT.jar)
+
 ```java
 String srcData;
 JSONObject config;
