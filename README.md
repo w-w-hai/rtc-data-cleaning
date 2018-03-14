@@ -1,3 +1,12 @@
+# Sample Code
+```java
+		String srcData;
+		JSONObject config;
+		Cleaner cleaner = Cleaner.create(config);
+		Result result = cleaner.process(srcData);
+		System.out.println(result.getPayload());
+```
+
 # Sample Config
 ```
 {
@@ -5,7 +14,7 @@
 		"type":"json"
 	},
 
-    "decoder":{
+	"decoder":{
 		"type":"grok",
 		"grok_patterns_file":"src\\main\\resources\\mypatterns",
 		"grok_patterns":{
