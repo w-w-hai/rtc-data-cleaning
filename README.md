@@ -4,7 +4,7 @@
 
 Cleaner的输入是一个String，最终输出是一个JSON。这里借鉴了Logstash里的filter的概念，但这里为两类，decoder和filter。decoder负责将一个String解析成JSON；filter负责将一个JSON转化成另一个(也可以是同一个)JSON，最终形成一个清洗链
 
-[Getting Started](./README.md)
+[Getting Started](./README.md#user-content-sample-config)
 
 [Sample Config](./README.md#Sample Config)
 
