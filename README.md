@@ -1,10 +1,16 @@
+在ETL中的"T"或者是实时流处理中我们经常需要针对每个用户需求开发一个类或者代码块来完成数据清洗的工作
+
+使用这个类库，你只需要开发一个公共处理类，然后写一个JSON配置作为参数传到类中，就能轻松完成需求，节省大量开发，测试，发布和维护成本
+
+这里借鉴了Logstash里的filter
+
 # Sample Code
 ```java
-		String srcData;
-		JSONObject config;
-		Cleaner cleaner = Cleaner.create(config);
-		Result result = cleaner.process(srcData);
-		System.out.println(result.getPayload());
+String srcData;
+JSONObject config;
+Cleaner cleaner = Cleaner.create(config);
+Result result = cleaner.process(srcData);
+System.out.println(result.getPayload());
 ```
 
 # Sample Config
@@ -61,7 +67,7 @@
 ### grok
 * 描述
 ```
-通过正则表达式解析source string为jsonobject
+通过正则表达式解析source string为jsonobject,语法参考logstash grok
 ```
 * 参数
 ```
