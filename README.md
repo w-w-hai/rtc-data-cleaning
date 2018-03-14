@@ -8,6 +8,7 @@ Cleaner的输入是一个String，最终输出是一个JSON。这里借鉴了Log
 * [Sample Config](./README.md#user-content-sample-config)
 	* [Decoder](./README.md#user-content-decoder): [json](./README.md#user-content-json) [grok](./README.md#user-content-grok)
 	* [Filters](./README.md#user-content-filters): [rename](./README.md#user-content-rename) [remove](./README.md#user-content-remove) [keep](./README.md#user-content-keep) [underline](./README.md#user-content-underline) [iptolong](./README.md#user-content-iptolong) [add](./README.md#user-content-add) [date](./README.md#user-content-date) [trim](./README.md#user-content-trim) [replaceall](./README.md#user-content-replaceall) [bool](./README.md#user-content-bool) [json](./README.md#user-content-json) [split](./README.md#user-content-split) [grok](./README.md#user-content-grok) [eval](./README.md#user-content-eval) [java](./README.md#user-content-java)
+* [自定义插件](./README.md#user-content-自定义插件)
 
 
 # Getting Started
@@ -236,7 +237,7 @@ repl：用于替换的字符串
 ### bool
 * 描述
 ```
-根据条件过滤
+根据条件过滤，只有满足条件的数据才会被保留
 ```
 * 参数
 ```
@@ -332,3 +333,34 @@ import：代码需要引入的类，如果pom里并没有指定相应的dependen
 ```
 {"filter":"java", "params":{"code_file":"./code.txt","import":["com.google.common.collect.Lists"]}}
 ```
+
+# 自定义插件
+开发和使用自定义的decoder和filter也很简单，以decoder为例
+
+* 在`com.sdo.dw.rtc.cleaning.decoder.impl`包中新建`Decoder`接口的实现类`MyDecoder`，并且加上`@DecoderType("my")`注解
+```
+@DecoderType("my")
+public class MyDecoder implements Decoder {
+	private static final Logger LOGGER = LoggerFactory.getLogger(MyDecoder.class);
+
+	@Override
+	public void init(Context decoderContext) throws InvalidParameterException {
+	}
+
+	@Override
+	public JSONObject decode(String source) {
+		// construct json from source
+		return json;
+	}
+
+}
+```
+* 然后就可以在配置中调用该decoder
+```
+{
+	"decoder":"my",
+	"my_param1":"abc",
+	"my_param2":123
+}
+```
+其中`my_param1`和`my_param2`可以通过`decoderContext`获取
