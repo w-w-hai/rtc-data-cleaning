@@ -104,13 +104,14 @@ public class CommonUtils {
 		// load default patterns, which will be overriden by custom patterns
 		grok.addPatternFromReader(
 				new InputStreamReader(CommonUtils.class.getClassLoader().getResourceAsStream("default_patterns")));
+		if (patternFile != null) {
+			grok.addPatternFromFile(patternFile);
+		}
+		// grok_patterns优先级高于grok_patterns_file
 		if (patterns != null) {
 			for (Entry<String, Object> entry : patterns.entrySet()) {
 				grok.addPattern(entry.getKey(), entry.getValue().toString());
 			}
-		}
-		if (patternFile != null) {
-			grok.addPatternFromFile(patternFile);
 		}
 
 		if (grok.getPatterns().isEmpty()) {
