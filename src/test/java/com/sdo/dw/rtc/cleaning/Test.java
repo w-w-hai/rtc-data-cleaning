@@ -62,7 +62,8 @@ public class Test {
 
 	public static void testMain() throws Exception {
 		String testLog = "2018-02-09 17:14:04	{\"messageType\":102,\"orderId\":\"99000000025708180209171404202910\",\"contextId\":\"99000000025708180209171404202910\",\"appCode\":1,\"settleTime\":\"2018-02-09 17:14:04\",\"endpointIp\":\"183.69.203.157\",\"ptId\":\"na00680708268.pt\",\"sndaId\":\"3485642628\",\"appId\":991002085,\"areaId\":1,\"payTypeId\":57,\"amount\":900,\"balanceBefore\":199040,\"itemInfo\":\"0\",\"messageId\":\"BS3412151816764477600001\",\"messageSourceIp\":\"10.129.34.12\",\"messageTimestamp\":\"2018-02-09 17:14:04.776\"}";
-		Cleaner cleaner = Cleaner.create(getConfig("test.json"));
+
+		Cleaner cleaner = Cleaner.create(getConfig("test_java.json"));
 		Result result = cleaner.process(testLog);
 		System.out.println(JSON.toJSONString(result.getPayload(), true));
 	}
@@ -73,7 +74,7 @@ public class Test {
 		String s = null;
 		StringBuilder sb = new StringBuilder();
 		while ((s = br.readLine()) != null) {
-			sb.append(s.replace("\\", "\\\\"));
+			sb.append(s);
 		}
 		br.close();
 		return JSON.parseObject(sb.toString());
