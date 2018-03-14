@@ -2,7 +2,7 @@
 
 使用这个类库，你只需要开发一个公共处理类，然后写一个JSON配置作为参数传到类中，就能轻松完成需求，节省大量开发，测试，发布和维护成本
 
-这里借鉴了Logstash里的filter
+Cleaner的输入是一个String，最终输出是一个JSON。这里借鉴了Logstash里的filter的概念，但这里为两类，decoder和filter。decoder负责将一个String解析成JSON；filter负责将一个JSON转化成另一个(也可以是同一个)JSON，最终形成一个清洗链
 
 # Getting Started
 * 下载[rtc-data-cleaning-\<version\>.jar](./build/rtc-data-cleaning-0.0.1-SNAPSHOT.jar), 或者将整个项目clone下来mvn package自行编译打包
