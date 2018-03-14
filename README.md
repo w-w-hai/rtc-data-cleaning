@@ -4,9 +4,12 @@
 
 Cleaner的输入是一个String，最终输出是一个JSON。这里借鉴了Logstash里的filter的概念，但这里为两类，decoder和filter。decoder负责将一个String解析成JSON；filter负责将一个JSON转化成另一个(也可以是同一个)JSON，最终形成一个清洗链
 
-[Getting Started](./README.md#user-content-sample-config)
+* [Getting Started](./README.md#user-content-getting-started)
+* [Sample Config](./README.md#user-content-sample-config)
+	* [Decoder](./README.md#user-content-decoder)
+	* [Filters](./README.md#user-content-filters)
 
-[Sample Config](./README.md#Sample Config)
+
 
 # Getting Started
 * 下载[rtc-data-cleaning-\<version\>.jar](./build/rtc-data-cleaning-0.0.1-SNAPSHOT.jar), 或者将整个项目clone下来mvn package自行编译打包
@@ -59,7 +62,7 @@ srcData传入需要清洗的数据，config是清洗的配置信息，具体配�
 
 ```
 
-# Decoder
+## Decoder
 ### json
 * 描述
 ```
@@ -98,7 +101,7 @@ grok_entry：正则入口
 }
 ```
 		
-# Filters
+## Filters
 ### rename
 * 描述
 ```
