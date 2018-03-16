@@ -15,52 +15,30 @@ Cleaner的输入是一个String，最终输出是一个JSON。这里借鉴了Log
 * 下载[rtc-data-cleaning-\<version\>.jar](./build/rtc-data-cleaning-0.0.1-SNAPSHOT.jar), 或者将整个项目clone下来mvn package自行编译打包
 * 使用非常的简单，代码如下：
 ```java
-String srcData;
-JSONObject config;
-Cleaner cleaner = Cleaner.create(config);
-Result result = cleaner.process(srcData);
-System.out.println(result.getPayload());
+String testLog = "2018-02-09 17:14:04	INFO";
+String config = "{" + 
+		"	\"decoder\":{" + 
+		"		\"type\":\"grok\"," + 
+		"		\"grok_patterns\":{" + 
+		"			\"TESTLOG\":\"%{DATA:eventTime}\\t%{GREEDYDATA:level}\"" + 
+		"		}," + 
+		"		\"grok_entry\":\"TESTLOG\"" + 
+		"	}," + 
+		"	" + 
+		"	\"filters\":[" + 
+		"		{\"type\":\"date\", \"params\":{\"field\":\"eventTime\",\"source\":\"yyyy-MM-dd HH:mm:ss\",\"target\":\"yyyyMMdd HHmmss\"}}," + 
+		"		{\"type\":\"underline\", \"params\":{\"fields\":[\"eventTime\"]}}" + 
+		"	]" + 
+		"}";
+
+Cleaner cleaner = Cleaner.create(JSON.parseObject(config));
+Result result = cleaner.process(testLog);
+System.out.println(JSON.toJSONString(result.getPayload(), true));
 ```
 srcData传入需要清洗的数据，config是清洗的配置信息，具体配置见下一章节
 
 # Sample Config
 具体用法可以参考[测试代码](./src/test/java/com/sdo/dw/rtc/cleaning/Test.java)
-```
-{
-	"decoder":{
-		"type":"json"
-	},
-
-	"decoder":{
-		"type":"grok",
-		"grok_patterns_file":"src\\main\\resources\\mypatterns",
-		"grok_patterns":{
-			"YEAR":"(?>\\d\\d){1,2}",
-			"MONTHNUM":"(?:0?[1-9]|1[0-2])",
-			"DATE_CN":"%{YEAR:year}[/-]%{MONTHNUM:monthnum}"
-		},
-		"grok_entry":"DATE_CN"
-	}
-	
-	"filters":[
-		{"type":"rename", "params":{"fields":{"gameId":"game_id","monthnum":"MONTH"}}},
-		{"type":"date", "params":{"field":"event_time","source":"yyyyMMdd","target":"yyyy-MM-dd"}},
-		{"type":"remove", "params":{"fields":["abc"]}},
-		{"type":"keep", "params":{"fields":["messageType","settleTime","ptId"]}},
-		{"type":"add", "params":{"fields":{"newf1":"v1","newf2":"v2"}, "preserve_existing":true}},
-		{"type":"trim", "params":{"fields":["abc"]}},
-		{"type":"replaceall", "params":{"field":"event_time","regex":"abc","repl":"def"}},
-		{"type":"underline", "params":{"fields":["abc"]}},
-		{"type":"eval", "params":{"field":"new_calc", "expr":"(a/2+ b*5)"}},
-		{"type":"bool", "params":{"conditions":" (a!='qq' or b!=123.1) and c !=1"}},
-		{"type":"json", "params":{"field":"abc", "discard_existing":false, "preserve_existing":true, "append_prefix":false}},
-		{"type":"smiley", "params":{"field":"abc", "discard_existing":false, "preserve_existing":true, "append_prefix":false}},
-		{"type":"grok", "params":{"field":"abc", "discard_existing":false, "preserve_existing":true, "append_prefix":false, "entry":"SPLIT_DATA", "patterns":{"SPLIT_DATA":"%{DATA:f1}|%{GREEDYDATA:f2}"}}},
-		{"type":"java", "params":{"code_file":"C:\\Users\\xiejing.kane.SNDA\\Desktop\\code","import":["com.google.common.collect.Lists"]}}
-	]
-}
-
-```
 
 ## Decoder
 ### json
