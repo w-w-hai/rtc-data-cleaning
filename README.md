@@ -35,7 +35,21 @@ Cleaner cleaner = Cleaner.create(JSON.parseObject(config));
 Result result = cleaner.process(srcData);
 System.out.println(JSON.toJSONString(result.getPayload(), true));
 ```
-srcData传入需要清洗的数据，config是清洗的配置信息，建议放到一个单独的配置文件中读取，具体配置见下一章节
+srcData是传入需要清洗的数据，config是清洗的配置信息，建议放到一个单独的配置文件中读取，具体配置见下一章节
+
+这里做了三步处理:
+1. 从日志中解析出eventTime字段和level字段
+2. 将eventTime字段的格式由yyyy-MM-dd HH:mm:ss改变为yyyyMMdd HHmmss
+3. 将字段名eventTime的格式由驼峰表达式转化为下划线表达式event_time
+
+最终得到清洗后的数据
+```
+{
+	"level":"INFO",
+	"event_time":"20180209 171404"
+}
+
+```
 
 # Sample Config
 具体用法可以参考[测试代码](./src/test/java/com/sdo/dw/rtc/cleaning/Test.java)
