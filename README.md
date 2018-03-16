@@ -15,7 +15,7 @@ Cleaner的输入是一个String，最终输出是一个JSON。这里借鉴了Log
 * 下载[rtc-data-cleaning-\<version\>.jar](./build/rtc-data-cleaning-0.0.1-SNAPSHOT.jar), 或者将整个项目clone下来mvn package自行编译打包
 * 使用非常的简单，代码如下：
 ```java
-String testLog = "2018-02-09 17:14:04	INFO";
+String srcData = "2018-02-09 17:14:04	INFO";
 String config = "{" + 
 		"	\"decoder\":{" + 
 		"		\"type\":\"grok\"," + 
@@ -32,10 +32,10 @@ String config = "{" +
 		"}";
 
 Cleaner cleaner = Cleaner.create(JSON.parseObject(config));
-Result result = cleaner.process(testLog);
+Result result = cleaner.process(srcData);
 System.out.println(JSON.toJSONString(result.getPayload(), true));
 ```
-srcData传入需要清洗的数据，config是清洗的配置信息，具体配置见下一章节
+srcData传入需要清洗的数据，config是清洗的配置信息，建议放到一个单独的配置文件中读取，具体配置见下一章节
 
 # Sample Config
 具体用法可以参考[测试代码](./src/test/java/com/sdo/dw/rtc/cleaning/Test.java)
