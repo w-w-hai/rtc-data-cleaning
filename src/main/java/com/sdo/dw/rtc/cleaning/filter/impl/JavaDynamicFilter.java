@@ -36,7 +36,6 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Lists;
 import com.sdo.dw.rtc.cleaning.exception.InvalidParameterException;
 import com.sdo.dw.rtc.cleaning.filter.Filter;
 import com.sdo.dw.rtc.cleaning.filter.FilterType;
@@ -136,22 +135,20 @@ public class JavaDynamicFilter implements Filter {
 	 * @throws Exception
 	 */
 	private void instantiateTarget(File classesDir) throws Exception {
-		URLClassLoader newLoader = null;
+		Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+		boolean accessible = method.isAccessible();
 		try {
-			URLClassLoader oldLoader = (URLClassLoader) JavaDynamicFilter.class.getClassLoader();
-			List<URL> urlList = Lists.newArrayList(oldLoader.getURLs());
-			urlList.add(classesDir.toURI().toURL());
-			newLoader = new URLClassLoader(urlList.toArray(new URL[] {}), oldLoader);
+			method.setAccessible(true);
+			URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+			URL url = classesDir.toURI().toURL();
+			method.invoke(classLoader, url);
 
 			String fullClassName = this.getClass().getPackage().getName() + "." + TEMPLATE_CLASS_NAME;
-			Class<? extends Object> targetClass = newLoader.loadClass(fullClassName);
+			Class<? extends Object> targetClass = classLoader.loadClass(fullClassName);
 			target = targetClass.newInstance();
 			targetMethod = targetClass.getDeclaredMethod(TEMPLATE_METHOD_NAME, JSONObject.class, JSONObject.class);
-			newLoader.close();
 		} finally {
-			if (newLoader != null) {
-				newLoader.close();
-			}
+			method.setAccessible(accessible);
 		}
 	}
 

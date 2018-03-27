@@ -14,6 +14,7 @@ Cleaner的输入是一个String，最终输出是一个JSON。这里借鉴了Log
 # Getting Started
 * 下载[rtc-data-cleaning-\<version\>.jar](./build/rtc-data-cleaning-0.0.1-SNAPSHOT.jar), 或者将整个项目clone下来mvn package自行编译打包
 * 使用非常的简单，代码如下：
+
 ```java
 String srcData = "2018-02-09 17:14:04	INFO";
 String config = "{" + 
