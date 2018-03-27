@@ -16,11 +16,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
-import com.sdo.dw.rtc.cleaning.Cleaner;
-import com.sdo.dw.rtc.cleaning.Result;
 import com.sdo.dw.rtc.cleaning.filter.Filter;
 import com.sdo.dw.rtc.cleaning.filter.FilterType;
-import com.sdo.dw.rtc.cleaning.filter.impl.AddFilter;
 import com.sdo.dw.rtc.cleaning.filter.impl.BoolFilter;
 import com.sdo.dw.rtc.cleaning.filter.impl.DateFilter;
 import com.sdo.dw.rtc.cleaning.filter.impl.EvalFilter;
@@ -40,7 +37,7 @@ import net.sf.jsqlparser.JSQLParserException;
 
 public class Test {
 	public static void main(String[] args) throws Exception {
-		testMain();
+		// testMain();
 		// testRenameFilter();
 		// testAnnotatedFilters();
 		// testJavaDynamicFilter();
@@ -49,7 +46,7 @@ public class Test {
 		// testDateFilter();
 		// testIPToLongFilter();
 		// testRemoveFilter();
-		// testAddFilter();
+		testAddFilter();
 		// testTrimFilter();
 		// testReplaceAllFilter();
 		// testKeepFilter();
@@ -62,7 +59,7 @@ public class Test {
 
 	public static void testMain() throws Exception {
 		String testLog = "2018-02-09 17:14:04	{\"messageType\":102,\"orderId\":\"99000000025708180209171404202910\",\"contextId\":\"99000000025708180209171404202910\",\"appCode\":1,\"settleTime\":\"2018-02-09 17:14:04\",\"endpointIp\":\"183.69.203.157\",\"ptId\":\"na00680708268.pt\",\"sndaId\":\"3485642628\",\"appId\":991002085,\"areaId\":1,\"payTypeId\":57,\"amount\":900,\"balanceBefore\":199040,\"itemInfo\":\"0\",\"messageId\":\"BS3412151816764477600001\",\"messageSourceIp\":\"10.129.34.12\",\"messageTimestamp\":\"2018-02-09 17:14:04.776\"}";
-
+		System.out.println(testLog);
 		Cleaner cleaner = Cleaner.create(getConfig("test_java.json"));
 		Result result = cleaner.process(testLog);
 		System.out.println(JSON.toJSONString(result.getPayload(), true));
@@ -99,7 +96,7 @@ public class Test {
 	public static void testJavaDynamicFilter() throws Exception {
 		JavaDynamicFilter filter = new JavaDynamicFilter();
 		JSONObject config = new JSONObject();
-		config.put("code_file", Test.class.getResource("test_code").getPath());
+		config.put("code_file", Test.class.getClassLoader().getResource("test_code").getPath());
 		JSONArray array = new JSONArray();
 		array.add("com.google.common.collect.Lists");
 		array.add("java.util.List");
@@ -160,10 +157,10 @@ public class Test {
 		System.out.println(filter.filter(data));
 	}
 
-	public static void testAddFilter() {
+	public static void testAddFilter() throws Exception {
 		JSONObject config = JSON
 				.parseObject("{\"fields\":{\"newf1\":\"v1\",\"newf2\":\"v2\"}, \"preserve_existing\":false}");
-		AddFilter filter = new AddFilter();
+		Filter filter = (Filter) Class.forName("com.sdo.dw.rtc.cleaning.filter.impl.AddFilter").newInstance();
 		filter.init(config);
 		JSONObject data = new JSONObject();
 		data.put("newf1", "20180131");

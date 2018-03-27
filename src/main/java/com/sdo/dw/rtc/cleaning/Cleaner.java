@@ -5,18 +5,27 @@ import static com.sdo.dw.rtc.cleaning.Constants.FILTERS;
 import static com.sdo.dw.rtc.cleaning.Constants.FILTER_PARAMS;
 import static com.sdo.dw.rtc.cleaning.Constants.TYPE;
 
+import java.io.File;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
+import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.sdo.dw.rtc.cleaning.decoder.Decoder;
 import com.sdo.dw.rtc.cleaning.exception.InvalidParameterException;
 import com.sdo.dw.rtc.cleaning.filter.Filter;
+import com.sdo.dw.rtc.cleaning.filter.FilterType;
 import com.sdo.dw.rtc.cleaning.util.CommonUtils;
 
 /**
@@ -112,5 +121,34 @@ public class Cleaner {
 	public static Cleaner create(Properties props) throws Exception {
 		Cleaner formatter = new Cleaner(new Context(props));
 		return formatter;
+	}
+
+	public static Set<String> listFilters() throws Exception {
+		Map<String, String> annotatedFilters = Maps.newHashMap();
+		Reflections reflections = new Reflections(Filter.class.getPackage().getName() + ".impl");
+		Set<Class<?>> annotated = reflections.getTypesAnnotatedWith(FilterType.class);
+		for (Class<?> filter : annotated) {
+			String annotation = filter.getAnnotation(FilterType.class).value();
+			if (annotatedFilters.containsKey(annotation)) {
+				throw new Exception(
+						MessageFormat.format("Duplicated declaration of Annotation: {0}, classes = [{1}, {2}]",
+								annotation, annotatedFilters.get(annotation), filter.getName()));
+			}
+			annotatedFilters.put(annotation, filter.getName());
+		}
+		return annotatedFilters.keySet();
+	}
+
+	public static void reloadJar(File jarFile) throws Exception {
+		Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+		boolean accessible = method.isAccessible();
+		try {
+			method.setAccessible(true);
+			URLClassLoader classLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+			URL url = jarFile.toURI().toURL();
+			method.invoke(classLoader, url);
+		} finally {
+			method.setAccessible(accessible);
+		}
 	}
 }
