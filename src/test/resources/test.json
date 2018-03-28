@@ -2,14 +2,13 @@
 	"decoder":{
 		"type":"grok",
 		"grok_patterns":{
-			"BSLOG":"%{DATA}\t%{GREEDYDATA:data}"
+			"TESTLOG":"%{DATA:eventTime}\t%{GREEDYDATA:level}"
 		},
-		"grok_entry":"BSLOG"
+		"grok_entry":"TESTLOG"
 	},
 	
 	"filters":[
-		{"type":"json", "params":{"field":"data", "discard_existing":true}},
-		{"type":"keep", "params":{"fields":["ptId","orderId","amount"]}},
-		{"type":"underline", "params":{"fields":["orderId"]}}
+		{"type":"date", "params":{"field":"eventTime","source":"yyyy-MM-dd HH:mm:ss","target":"yyyyMMdd HHmmss"}},
+		{"type":"underline", "params":{"fields":["eventTime"]}}
 	]
 }

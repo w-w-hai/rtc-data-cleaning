@@ -22,6 +22,7 @@ import com.sdo.dw.rtc.cleaning.filter.impl.BoolFilter;
 import com.sdo.dw.rtc.cleaning.filter.impl.DateFilter;
 import com.sdo.dw.rtc.cleaning.filter.impl.EvalFilter;
 import com.sdo.dw.rtc.cleaning.filter.impl.GrokFilter;
+import com.sdo.dw.rtc.cleaning.filter.impl.GroovyFilter;
 import com.sdo.dw.rtc.cleaning.filter.impl.IPToLongFilter;
 import com.sdo.dw.rtc.cleaning.filter.impl.JSONFilter;
 import com.sdo.dw.rtc.cleaning.filter.impl.JavaDynamicFilter;
@@ -46,7 +47,7 @@ public class Test {
 		// testDateFilter();
 		// testIPToLongFilter();
 		// testRemoveFilter();
-		testAddFilter();
+		// testAddFilter();
 		// testTrimFilter();
 		// testReplaceAllFilter();
 		// testKeepFilter();
@@ -55,6 +56,7 @@ public class Test {
 		// testBoolFilter();
 		// testUnderlineFilter();
 		// testGrokFilter();
+		testGroovyFilter();
 	}
 
 	public static void testMain() throws Exception {
@@ -115,6 +117,14 @@ public class Test {
 		data.put("ip", "70.30.65.9");
 		data.put("b", "2");
 		System.out.println(filter.filter(data).getLong("new_calc"));
+	}
+
+	public static void testGroovyFilter() throws ScriptException {
+		JSONObject config = JSON.parseObject("{\"field\":\"new_calc\", \"expr\":\"123\"}");
+		GroovyFilter filter = new GroovyFilter();
+		filter.init(config);
+		JSONObject data = new JSONObject();
+		System.out.println(filter.filter(data));
 	}
 
 	public static void testRenameFilter() {
